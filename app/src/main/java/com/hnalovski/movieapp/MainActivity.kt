@@ -5,6 +5,7 @@ package com.hnalovski.movieapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -38,6 +39,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.hnalovski.movieapp.navigation.MovieNavigation
 import com.hnalovski.movieapp.ui.theme.MovieAppTheme
 
 class MainActivity : ComponentActivity() {
@@ -45,36 +47,29 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             MyApp {
-                MainContent(it)
+                MovieNavigation()
             }
         }
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyApp(content: @Composable (PaddingValues) -> Unit) {
+fun MyApp(content: @Composable () -> Unit) {
     MovieAppTheme {
-        Scaffold(topBar = {
-            TopAppBar(
-                title = { Text(text = "Movies") },
-                modifier = Modifier.shadow(5.dp),
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Magenta)
-            )
-        }) {
-            content(it)
-
-        }
+        content()
     }
 }
 
 @Composable
-fun MovieRow(movie: String) {
+fun MovieRow(movie: String, onItemClick: (String) -> Unit = {}) {
     Card(
         modifier = Modifier
             .padding(4.dp)
             .fillMaxWidth()
-            .height(130.dp),
+            .height(130.dp)
+            .clickable {
+                onItemClick(movie)
+            },
         shape = RoundedCornerShape(corner = CornerSize(16.dp)),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
@@ -101,40 +96,13 @@ fun MovieRow(movie: String) {
     }
 }
 
-@Composable
-fun MainContent(
-    paddingValues: PaddingValues,
-    movieList: List<String> = listOf(
-        "Avatar",
-        "300",
-        "47 Ronin",
-        "Pacific Rim",
-        "Super Mario",
-        "Fantastic Four",
-        "John Wick"
-    )
-) {
-    Surface(
-        modifier = Modifier.padding(top = paddingValues.calculateTopPadding()),
-        color = MaterialTheme.colorScheme.background
-    ) {
-        Column(modifier = Modifier.padding(12.dp)) {
-            LazyColumn {
-                items(items = movieList) {
-                    MovieRow(movie = it)
 
-                }
-            }
-        }
-
-    }
-}
 
 
 @Preview(showBackground = true)
 @Composable
 fun GreetingPreview() {
     MyApp {
-        MainContent(it)
+        MovieNavigation()
     }
 }
