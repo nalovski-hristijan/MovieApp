@@ -29,7 +29,7 @@ fun HomeScreen(navController: NavController) {
         TopAppBar(
             title = { Text(text = "Movies") },
             modifier = Modifier.shadow(5.dp),
-            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.Magenta)
+            colors = TopAppBarDefaults.topAppBarColors(containerColor = Color.LightGray)
         )
     }) {
         MainContent(navController = navController)
@@ -57,7 +57,7 @@ fun MainContent(
             LazyColumn {
                 items(items = movieList) {
                     MovieRow(movie = it) {movie ->
-                        navController.navigate(route = MovieScreens.DetailsScreen.name)
+                        navController.navigate(route = MovieScreens.DetailsScreen.name + "/$movie")
 
                     }
 
