@@ -18,8 +18,10 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
-import com.hnalovski.movieapp.MovieRow
+import com.hnalovski.movieapp.model.Movie
+import com.hnalovski.movieapp.model.getMovies
 import com.hnalovski.movieapp.navigation.MovieScreens
+import com.hnalovski.movieapp.widgets.MovieRow
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,15 +42,7 @@ fun HomeScreen(navController: NavController) {
 @Composable
 fun MainContent(
     navController: NavController,
-    movieList: List<String> = listOf(
-        "Avatar",
-        "300",
-        "47 Ronin",
-        "Pacific Rim",
-        "Super Mario",
-        "Fantastic Four",
-        "John Wick"
-    )
+    movieList: List<Movie> = getMovies()
 ) {
     Surface(
         color = MaterialTheme.colorScheme.background
@@ -56,7 +50,7 @@ fun MainContent(
         Column(modifier = Modifier.padding(12.dp)) {
             LazyColumn {
                 items(items = movieList) {
-                    MovieRow(movie = it) {movie ->
+                    MovieRow(movie = it) { movie ->
                         navController.navigate(route = MovieScreens.DetailsScreen.name + "/$movie")
 
                     }
